@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>User Order view</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css"/>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.26/dist/sweetalert2.all.min.js"></script>
+    <style>
+        /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+        .row.content {
+            height: 100vh;
+        }
+
+        /* Set gray background color and 100% height */
+        .sidenav {
+            background-color: #f1f1f1;
+            height: 100%;
+        }
+
+        /* On small screens, set height to 'auto' for the grid */
+        @media screen and (max-width: 767px) {
+            .row.content {
+                height: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-inverse visible-xs">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Krishi Bhavan</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li ><a href="{% url 'user_home' %}">Dashboard</a></li>
+                    <li class="active"><a href="{% url 'view_orders_user' %}">My Orders</a></li>
+                    <li><a href="{% url 'history_orders_user' %}">Order history</a></li>
+                    <li><a href="{% url 'chat_section' %}">Chat room</a></li>
+                    <li><a href="{% url 'user_soil' %}">Request for soil test</a></li>
+                    <li><a href="{% url 'user_soil_history' %}">Soil test history</a></li>
+                    <li><a href="{% url 'logout_user' %}" id="logout">logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row content">
+            <div class="col-sm-3 sidenav hidden-xs">
+                <h2>Krishi Bhavan</h2>
+                <ul class="nav nav-pills nav-stacked">
+                    <li><a href="{% url 'user_home' %}">Dashboard</a></li>
+                    <li class="active"><a href="{% url 'view_orders_user' %}">My orders</a></li>
+                    <li><a href="{% url 'history_orders_user' %}">Order history</a></li>
+                    <li><a href="{% url 'chat_section' %}">Chat room</a></li>
+                    <li><a href="{% url 'user_soil' %}">Request for soil test</a></li>
+                    <li><a href="{% url 'user_soil_history' %}">Soil test history</a></li>
+                    <li><a href="{% url 'logout_user' %}" id="logout">logout</a></li>
+                </ul><br>
+            </div>
+            <br>
+
+            <div class="col-sm-9">
+                <div class="well text-center">
+                    <h4>Dashboard</h4>
+
+                </div>
+
+
+                <h2>Current order</h2>
+                
+                <table class="table text-center ">
+                    {% if all_data %}
+                    <thead>
+                        <tr class="align-items-center justify-content-center text-center">
+                            <th>No.</th>
+                            <th>Name</th>
+                            <th>Rate</th>
+                            <th>Count</th>
+                            <th>Image</th>
+                            <th>Service Provider</th>
+                            <th>Status</th>
+                            <th>Order dates</th>
+                            <th>Cancel</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for all_data in all_data %}
+                        <tr class="align-items-center justify-content-center text-center">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ all_data.name }}</td>
+                            <td>{{ all_data.rate }}</td>
+                            <td>{{ all_data.count }}</td>
+                            <td><img src="{{ all_data.image.url }}" style="max-height: 150px;"/></td>
+                            <td>{{ all_data.service_provider }}</td>
+                            <td>{{ all_data.status }}</td>
+                            <td>{{ all_data.date }}</td>
+                            <td>
+                                <form method="post" action="" onsubmit="return confirm('Do you want to cancel order?')">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="id" value="{{ all_data.id }}">
+                                    <button><i class="fa fa-times-circle" ></i></button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    {% else %}
+                    <p>No data found</p>
+                    {% endif %}
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+
+    {% if messages %}
+    {% for message in messages %}
+    <script>
+        Swal.fire('{{ message }}')
+    </script>
+    {% endfor %}
+    {% endif %}
+
+    <script>
+        document.getElementById("logout").onclick = function() {myFunction()};
+        function myFunction(){
+            Swal({
+                title: "Are you sure?",
+                text: "Once logout, you need to log in again !",
+                icon: "warning",
+                buttons: true,
+                dangerMode:true,
+            })
+            .then((willDelete) => {
+                if (willDelete){
+                    Swal("Done! you are logout1",{
+                        icon:"success"
+                    }).then(function() {
+                        window.location = "{% url 'logout_admin' %}";
+                    });
+                }else{
+                    Swal("Logout cancelled!")
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

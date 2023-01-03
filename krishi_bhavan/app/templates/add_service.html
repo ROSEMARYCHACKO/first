@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Add Service</title>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.26/dist/sweetalert2.all.min.js"></script>
+    <style>
+        /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+        .row.content {
+            height: 100vh;
+        }
+
+        /* Set gray background color and 100% height */
+        .sidenav {
+            background-color: #f1f1f1;
+            height: 100%;
+        }
+
+        /* On small screens, set height to 'auto' for the grid */
+        @media screen and (max-width: 767px) {
+            .row.content {
+                height: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-inverse visible-xs">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Krishi Bhavan</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li ><a href="{% url 'admin_home' %}">Dashboard</a></li>
+                    <li class="active"><a href="{% url 'admin_add_serviceprovider' %}">Add service provider</a></li>
+                    <li><a href="{% url 'admin_serviceprovider_view' %}">View service provider</a></li>
+                    <li><a href="{% url 'logout_admin' %}" id="logout">logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row content">
+            <div class="col-sm-3 sidenav hidden-xs">
+                <h2>Krishi Bhavan</h2>
+                <ul class="nav nav-pills nav-stacked">
+                    <li ><a href="{% url 'admin_home' %}">Dashboard</a></li>
+                    <li class="active"><a href="{% url 'admin_add_serviceprovider' %}">Add service provider</a></li>
+                    <li><a href="{% url 'admin_serviceprovider_view' %}">View service provider</a></li>
+                    <li><a href="{% url 'logout_admin' %}" id="logout">logout</a></li>
+                </ul><br>
+            </div>
+            <br>
+
+            <div class="col-sm-9">
+
+                <form action="" method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Email address</label>
+                        <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp"
+                            placeholder="Enter email" autocomplete="off">
+                        
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputEmail1">Full name</label>
+                        <input name="name" type="text" class="form-control" id="exampleInputEmail1" 
+                            placeholder="Enter name" autocomplete="off">
+                        
+                    </div>
+                    <div class="form-group">
+                        <label for="exampleInputPassword1">Password</label>
+                        <input name="password" type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    </div>
+                    
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+
+    {% if messages %}
+    {% for message in messages %}
+    <script>
+        Swal.fire('{{ message }}')
+    </script>
+    {% endfor %}
+    {% endif %}
+
+    <script>
+        document.getElementById("logout").onclick = function () { myFunction() };
+        function myFunction() {
+            Swal({
+                title: "Are you sure?",
+                text: "Once logout, you need to log in again !",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        Swal("Done! you are logout1", {
+                            icon: "success"
+                        }).then(function () {
+                            window.location = "{% url 'logout_admin' %}";
+                        });
+                    } else {
+                        Swal("Logout cancelled!")
+                    }
+                });
+        }
+    </script>
+</body>
+
+</html>

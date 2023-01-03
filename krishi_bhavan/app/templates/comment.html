@@ -1,0 +1,185 @@
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+  integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+
+<script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+  integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+  integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+<!------ Include the above in your HEAD tag ---------->
+<style>
+  /*/////////////////////////////////*/
+  /*/////////  chat styles  /////////*/
+  /*/////////////////////////////////*/
+  .chat {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .chat li {
+    margin-bottom: 40px;
+    padding-bottom: 5px;
+    /* border-bottom: 1px dotted #B3A9A9; */
+    margin-top: 10px;
+    width: 80%;
+  }
+
+
+  .chat li .chat-body p {
+    margin: 0;
+    /* color: #777777; */
+  }
+
+
+  .chat-care {
+    overflow-y: scroll;
+    height: 350px;
+  }
+
+  .chat-care .chat-img {
+    width: 50px;
+    height: 50px;
+  }
+
+  .chat-care .img-circle {
+    border-radius: 50%;
+  }
+
+  .chat-care .chat-img {
+    display: inline-block;
+  }
+
+  .chat-care .chat-body {
+    display: inline-block;
+    max-width: 80%;
+    border-radius: 12.5px;
+    padding: 15px;
+  }
+
+  .chat-care .chat-body strong {
+    color: #0169DA;
+  }
+
+  .chat-care .admin {
+    text-align: right;
+    float: right;
+  }
+
+  .chat-care .admin p {
+    text-align: left;
+  }
+
+  .chat-care .agent {
+    text-align: left;
+    float: left;
+  }
+
+  .chat-care .left {
+    float: left;
+  }
+
+  .chat-care .right {
+    float: right;
+  }
+
+  .clearfix {
+    clear: both;
+  }
+
+  .i {
+    font-style: italic !important;
+    font-size: 8px !important;
+    color: red;
+  }
+
+
+  ::-webkit-scrollbar-track {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+    background-color: #F5F5F5;
+  }
+
+  ::-webkit-scrollbar {
+    width: 12px;
+    background-color: #F5F5F5;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+    background-color: #555;
+  }
+</style>
+<br>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12 mx-auto">
+      <div class="card">
+        <div class="card-header text-center">
+          <span>Comment Box</span>
+        </div>
+        <div class="card-body chat-care">
+          {% if chat %}
+          <ul class="chat">
+            {% for chat in chat %}
+            {% if chat.user_id == user_id %}
+
+            <li class="admin clearfix">
+
+              <div class="chat-body clearfix" style="background-color: rgb(243, 237, 237);">
+                <div class="header clearfix">
+                  <small class="left text-muted" style="margin-right: 8px;"><span
+                      class="glyphicon glyphicon-time">{{chat.date}}</span></small>
+                  <strong class="right primary-font">{{chat.user_name}} {% if chat.user_type == 'service_provider' %}<i
+                      class="i">(Service Provider)</i>{% endif %}</strong>
+                </div>
+                <p>
+                  {{chat.comment}}
+                </p>
+              </div>
+            </li>
+            {% else %}
+            <li class="agent clearfix">
+
+              <div class="chat-body clearfix" style="background-color: rgb(211, 202, 202);">
+                <div class="header clearfix">
+                  <strong class="primary-font " style="margin-right: 8px;">{{chat.user_name}} {% if chat.user_type == 'service_provider' %}<i
+                    class="i">(Service Provider)</i>{% endif %}</strong><small
+                    class="right text-muted">
+                    <span class="glyphicon glyphicon-time"></span>{{chat.date}}</small>
+                </div>
+                <p>
+                  {{chat.comment}}
+                </p>
+              </div>
+            </li>
+            {% endif %}
+            {% endfor %}
+
+          </ul>
+          {% else %}
+          <p>No data found</p>
+          {% endif %}
+        </div>
+        <form method="post" action="">
+          {% csrf_token %}
+          <div class="card-footer">
+            <div class="input-group">
+
+              <input id="btn-input" name="chat" type="text" class="form-control input-sm" placeholder="Type your message here..." />
+              <span class="input-group-btn">
+                <button class="btn btn-primary" id="btn-chat">
+                  Send</button>
+              </span>
+
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  $('.card-body').scrollTop(1000000);
+</script>

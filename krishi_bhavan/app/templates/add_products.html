@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+
+<head>
+    <title>Add products</title>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/form.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.26/dist/sweetalert2.all.min.js"></script>
+
+</head>
+
+<body>
+
+    <h1>Add product</h1>
+    <form method="post" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+            <label for="name">Product name</label>
+            <input type="text" name="name" autocomplete="off" placeholder="Product name">
+        </div>
+        <div class="row">
+            <label for="des">Descriptions</label>
+            
+            
+                <textarea name="des" rows="4" cols="50">
+
+                </textarea>
+            
+        </div>
+        <div class="row">
+            <label for="rate">Product Rate</label>
+            <input type="number" name="rate" autocomplete="off" placeholder="Product rate">
+        </div>
+        <div class="row">
+            <label for="count">Product availability</label>
+            <input type="number" name="count" autocomplete="off" placeholder="Product availability">
+        </div>
+        <div class="row">
+            <label for="count">Product Image</label>
+            <input type="file" name="file" autocomplete="off" placeholder="Pick Image">
+        </div>
+        <input type="submit" value="Add">
+    </form>
+
+
+
+    {% if messages %}
+    {% for message in messages %}
+    <script>
+       Swal.fire('{{ message }}')
+    </script>
+
+    {% endfor %}
+    {% endif %}
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    
+</body>
+
+</html>

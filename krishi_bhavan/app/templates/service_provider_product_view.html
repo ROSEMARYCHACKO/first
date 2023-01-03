@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>Service Provider Products</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.26/dist/sweetalert2.all.min.js"></script>
+    <style>
+        /* Set height of the grid so .sidenav can be 100% (adjust as needed) */
+        .row.content {
+            height: 100vh;
+        }
+
+        /* Set gray background color and 100% height */
+        .sidenav {
+            background-color: #f1f1f1;
+            height: 100%;
+        }
+
+        /* On small screens, set height to 'auto' for the grid */
+        @media screen and (max-width: 767px) {
+            .row.content {
+                height: auto;
+            }
+        }
+        td,th{
+            vertical-align: baseline !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <nav class="navbar navbar-inverse visible-xs">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Krishi Bhavan</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="{% url 'service_home' %}">Dashboard</a></li>
+                    <li><a href="{% url 'add_products' %}">Add products</a></li>
+                    <li><a href="{% url 'service_provider_product_view' %}">View Products</a></li>
+                    <li><a href="{% url 'service_provider_order_history' %}">View History</a></li>
+                    <li><a href="{% url 'chat_section' %}">Chat room</a></li>
+                    <li><a href="{% url 'logout_service_provider' %}" id="logout">logout</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container-fluid">
+        <div class="row content">
+            <div class="col-sm-3 sidenav hidden-xs">
+                <h2>Krishi Bhavan</h2>
+                <ul class="nav nav-pills nav-stacked">
+                    <li><a href="{% url 'service_home' %}">Dashboard</a></li>
+                    <li><a href="{% url 'add_products' %}">Add products</a></li>
+                    <li class="active"><a href="{% url 'service_provider_product_view' %}">View Products</a></li>
+                    <li><a href="{% url 'service_provider_order_history' %}">View History</a></li>
+                    <li><a href="{% url 'chat_section' %}">Chat room</a></li>
+                    <li><a href="{% url 'logout_admin' %}" id="logout">logout</a></li>
+                </ul><br>
+            </div>
+            <br>
+
+            <div class="col-sm-9">
+                <div class="well text-center">
+                    <h4>Dashboard</h4>
+
+                </div>
+
+
+                <h2>All products</h2>
+                <input class="form-control" id="myInput" type="text" placeholder="Search..">
+                <table class="table text-center ">
+                    {% if all_data %}
+                    <thead>
+                        <tr class="align-items-center justify-content-center text-center">
+                            <th>No.</th>
+                            <th>Name</th>
+                            <th>Descripption</th>
+                            <th>Rate</th>
+                            <th>Available</th>
+                            <th>Image</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        </tr>
+                    </thead>
+                    <tbody id="myTable">
+                        {% for all_data in all_data %}
+                        
+                        <tr class="align-items-center justify-content-center text-center">
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ all_data.name }}</td>
+                            <td>{{ all_data.description }}</td>
+                            <td>{{ all_data.rate }}</td>
+                            <td>{{ all_data.count }}</td>
+                            <td><img src="{{ all_data.image.url }}" style="max-height: 150px;"/></td>
+                            <td><a href="{% url 'service_provider_product_edit' %}?id={{ all_data.id }}"><i class="fa-solid fa-user-pen"></i></a></td>
+                            <td>
+                                <form method="post" action="" onsubmit="return confirm('Do you want to delete?')">
+                                    {% csrf_token %}
+                                    <input type="hidden" name="id" value="{{ all_data.id }}">
+                                    <button><i class="fa-solid fa-trash"></i></button>
+                                </form>
+                            </td>
+                             </tr>
+                        
+                        {% endfor %}
+                    </tbody>
+                    {% else %}
+                    <p>No data found</p>
+                    {% endif %}
+                </table>
+
+            </div>
+        </div>
+    </div>
+
+
+    {% if messages %}
+    {% for message in messages %}
+    <script>
+        Swal.fire('{{ message }}')
+    </script>
+    {% endfor %}
+    {% endif %}
+
+    <script>
+        document.getElementById("logout").onclick = function () { myFunction() };
+        function myFunction() {
+            Swal({
+                title: "Are you sure?",
+                text: "Once logout, you need to log in again !",
+                icon: "warning",
+                buttons: true,
+                dangerMode: true,
+            })
+                .then((willDelete) => {
+                    if (willDelete) {
+                        Swal("Done! you are logout1", {
+                            icon: "success"
+                        }).then(function () {
+                            window.location = "{% url 'logout_admin' %}";
+                        });
+                    } else {
+                        Swal("Logout cancelled!")
+                    }
+                });
+        }
+    </script>
+    <script>
+        $(document).ready(function(){
+          $("#myInput").on("keyup", function() {
+            var value = $(this).val().toLowerCase();
+            $("#myTable tr").filter(function() {
+              $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+            });
+          });
+        });
+        </script>
+</body>
+
+</html>

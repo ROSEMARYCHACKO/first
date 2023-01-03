@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+
+<head>
+    <title>Login</title>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/form.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.26/dist/sweetalert2.all.min.js"></script>
+
+</head>
+
+<body>
+
+    <h1>Login</h1>
+    <form method="post" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+            <label for="username">Username / Email</label>
+            <input type="text" name="username" autocomplete="off" placeholder="username / email">
+        </div>
+        <div class="row">
+            <label for="password">Password</label>
+            
+            <div class="input-group-addon" id="show_hide_password">
+                <input type="password" name="password">
+                <a ><i class="fa fa-eye-slash" aria-hidden="true"></i></a>
+            </div>
+        </div>
+        <input type="submit" value="Login">
+        <br>
+        <a href="{% url 'user_register' %}">Register?</a>
+    </form>
+
+
+
+    {% if messages %}
+    {% for message in messages %}
+    <script>
+        Swal.fire('{{ message }}')
+    </script>
+
+    {% endfor %}
+    {% endif %}
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+        $( document ).ready(function() {
+            $("#show_hide_password a").on('click', function (event) {
+                event.preventDefault();
+                if ($('#show_hide_password input').attr("type") == "text") {
+                    $('#show_hide_password input').attr('type', 'password');
+                    $('#show_hide_password i').addClass("fa-eye-slash");
+                    $('#show_hide_password i').removeClass("fa-eye");
+                } else if ($('#show_hide_password input').attr("type") == "password") {
+                    $('#show_hide_password input').attr('type', 'text');
+                    $('#show_hide_password i').removeClass("fa-eye-slash");
+                    $('#show_hide_password i').addClass("fa-eye");
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

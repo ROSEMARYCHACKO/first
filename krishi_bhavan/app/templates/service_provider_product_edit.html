@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+{% load static %}
+
+<head>
+    <title>Edit products</title>
+    <link type="text/css" rel="stylesheet" href="{% static 'css/form.css' %}" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.2/css/all.min.css" />
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.4.26/dist/sweetalert2.all.min.js"></script>
+
+</head>
+
+<body>
+
+    <h1>Add product</h1>
+    {% if all_data %}
+    <form method="post" action="" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="row">
+            <label for="name">Product name</label>
+            <input type="text" name="name" value="{{ all_data.name }}" autocomplete="off" placeholder="Product name">
+        </div>
+        <div class="row">
+            <label for="des">Descriptions</label>
+            
+            
+                <input type="text" name="des" rows="4" cols="50" value="{{ all_data.description }}"/>
+                    
+                
+            
+        </div>
+        <div class="row">
+            <label for="rate">Product Rate</label>
+            <input type="number" name="rate" autocomplete="off" placeholder="Product rate" value="{{ all_data.rate }}">
+        </div>
+        <div class="row">
+            <label for="count">Product availability</label>
+            <input type="number" name="count" autocomplete="off" placeholder="Product availability" value="{{ all_data.count }}">
+        </div>
+        
+        <input type="submit" value="Add">
+    </form>
+    {% else %}
+    <p>No data found</p>
+    {% endif %}
+
+
+    {% if messages %}
+    {% for message in messages %}
+    <script>
+       Swal.fire('{{ message }}')
+    </script>
+
+    {% endfor %}
+    {% endif %}
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    
+</body>
+
+</html>
